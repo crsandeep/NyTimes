@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">NyTimes</string>
+    <string name="search_button">Search</string>
+    <string name="not_connected">Not connected</string>
+
+    <string-array name="sort_array">
+        <item>Old</item>
+        <item>New</item>
+    </string-array>
+</resources>
