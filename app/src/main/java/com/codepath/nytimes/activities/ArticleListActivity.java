@@ -27,9 +27,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.borax12.materialdaterangepicker.date.DatePickerDialog;
@@ -39,6 +36,7 @@ import com.codepath.nytimes.adapters.ArticleAdapter;
 import com.codepath.nytimes.adapters.EndlessRecyclerViewScrollListener;
 import com.codepath.nytimes.adapters.ItemClickSupport;
 import com.codepath.nytimes.databinding.ActivityArticleListBinding;
+import com.codepath.nytimes.databinding.FilterDialogBinding;
 import com.codepath.nytimes.models.Article;
 import com.codepath.nytimes.models.Response;
 import com.codepath.nytimes.network.ArticleApiInterface;
@@ -59,11 +57,10 @@ public class ArticleListActivity extends AppCompatActivity implements
         DatePickerDialog.OnDateSetListener {
 
     private ActivityArticleListBinding binding;
+    FilterDialogBinding filterBinding;
 
     private ArticleAdapter articleAdapter;
     private List<Article> articleList;
-
-    private EditText etDateRange;
 
     private SharedPreferences filterPreferences;
     private SharedPreferences.Editor editor;
@@ -126,7 +123,7 @@ public class ArticleListActivity extends AppCompatActivity implements
         TEMP_QUERY = "";
 
         if (!isNetworkAvailable(this)) {
-            Snackbar.make(findViewById(R.id.swipeContainer), R.string.not_connected, Snackbar.LENGTH_INDEFINITE).setAction("Retry",
+            Snackbar.make(binding.swipeContainer, R.string.not_connected, Snackbar.LENGTH_INDEFINITE).setAction("Retry",
                     v -> {
                         this.recreate();
                     }).show();
@@ -197,37 +194,35 @@ public class ArticleListActivity extends AppCompatActivity implements
         final View dialogView = inflater.inflate(R.layout.filter_dialog, null);
         dialogBuilder.setView(dialogView);
 
-        CheckBox checkArts = (CheckBox) dialogView.findViewById(R.id.checkBoxArts);
-        CheckBox checkFashion = (CheckBox) dialogView.findViewById(R.id.checkBoxFashion);
-        CheckBox checkSports = (CheckBox) dialogView.findViewById(R.id.checkBoxSports);
-        Spinner spinner = (Spinner) dialogView.findViewById(R.id.oldNewSpinner);
-        etDateRange = (EditText) dialogView.findViewById(R.id.etDateRange);
+        FilterDialogBinding filterBinding = DataBindingUtil.inflate(inflater, R.layout.filter_dialog, null, false);
 
-        checkArts.setChecked(filterPreferences.getBoolean("isArtsChecked", false));
-        checkFashion.setChecked(filterPreferences.getBoolean("isFashionChecked", false));
-        checkSports.setChecked(filterPreferences.getBoolean("isSportsChecked", false));
-        spinner.setSelection(filterPreferences.getInt("sortOrder", 0));
+
+        filterBinding.checkBoxArts.setChecked(filterPreferences.getBoolean("isArtsChecked", false));
+        filterBinding.checkBoxFashion.setChecked(filterPreferences.getBoolean("isFashionChecked", false));
+        filterBinding.checkBoxSports.setChecked(filterPreferences.getBoolean("isSportsChecked", false));
+        filterBinding.oldNewSpinner.setSelection(filterPreferences.getInt("sortOrder", 0));
+
         if(!TextUtils.isEmpty(filterPreferences.getString("begin_date", ""))) {
             String tempDateRange = filterPreferences.getString("begin_date", "") + '-' + filterPreferences.getString("end_date", "");
-            etDateRange.setText(tempDateRange);
+            filterBinding.etDateRange.setText(tempDateRange);
         }
 
         dialogBuilder.setTitle("Filter");
         dialogBuilder.setPositiveButton("Apply", (DialogInterface dialog, int whichButton) -> {
-                isArtsChecked = checkArts.isChecked();
+                isArtsChecked = filterBinding.checkBoxArts.isChecked();
                 editor.putBoolean("isArtsChecked", isArtsChecked);
 
-                isFashionChecked = checkFashion.isChecked();
+                isFashionChecked = filterBinding.checkBoxFashion.isChecked();
                 editor.putBoolean("isFashionChecked", isFashionChecked);
 
-                isSportsChecked = checkSports.isChecked();
+                isSportsChecked = filterBinding.checkBoxSports.isChecked();
                 editor.putBoolean("isSportsChecked", isSportsChecked);
 
-                sortOrder = spinner.getSelectedItemPosition();
+                sortOrder = filterBinding.oldNewSpinner.getSelectedItemPosition();
                 editor.putInt("sortOrder", sortOrder);
 
-                if(!TextUtils.isEmpty(etDateRange.getText().toString())) {
-                    String temp_date[] = etDateRange.getText().toString().split("-");
+                if(!TextUtils.isEmpty(filterBinding.etDateRange.getText().toString())) {
+                    String temp_date[] = filterBinding.etDateRange.getText().toString().split("-");
                     if(temp_date.length == 2) {
                         begin_date = temp_date[0];
                         end_date = temp_date[1];
@@ -253,9 +248,7 @@ public class ArticleListActivity extends AppCompatActivity implements
         AlertDialog b = dialogBuilder.create();
         b.show();
 
-        etDateRange = (EditText) b.findViewById(R.id.etDateRange);
-
-        etDateRange.setOnClickListener(v -> {
+        filterBinding.etDateRange.setOnClickListener(v -> {
                 Calendar now = Calendar.getInstance();
                 DatePickerDialog dpd = DatePickerDialog.newInstance(
                         ArticleListActivity.this,
@@ -377,11 +370,11 @@ public class ArticleListActivity extends AppCompatActivity implements
             monthEnd = "0" + monthEnd;
         }
         String date = Integer.toString(year)+month+day + "-" + yearEnd+monthEnd+dayEnd;
-        etDateRange.setText(date);
+        filterBinding.etDateRange.setText(date);
     }
 
     public void clearDate(View view) {
-        etDateRange.setText("");
+        filterBinding.etDateRange.setText("");
     }
 
     public void onDateSet(View view) {
