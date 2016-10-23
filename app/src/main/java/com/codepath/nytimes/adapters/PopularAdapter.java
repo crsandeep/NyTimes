@@ -46,8 +46,7 @@ public class PopularAdapter extends RecyclerView.Adapter<PopularAdapter.ViewHold
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
         View contactView = inflater.inflate(R.layout.item_article, parent, false);
-        ViewHolder viewHolder = new ViewHolder(contactView);
-        return viewHolder;
+        return new ViewHolder(contactView);
     }
 
     @Override
@@ -56,7 +55,7 @@ public class PopularAdapter extends RecyclerView.Adapter<PopularAdapter.ViewHold
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.tvWebLink) TextView tvWebLink;
+        @BindView(R.id.tvTitle) TextView tvWebLink;
         @BindView(R.id.imgArticle) ImageView imgArticle;
         public ViewHolder(View itemView) {
             super(itemView);

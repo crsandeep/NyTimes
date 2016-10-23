@@ -34,4 +34,12 @@ public class Article {
         return headline;
     }
 
+    public boolean hasThumbnail() {
+        if(multimedia.size() > 0){
+            return Boolean.TRUE;
+        }else{
+            return Boolean.FALSE;
+        }
+    }
+
 }

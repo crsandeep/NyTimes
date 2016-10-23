@@ -22,21 +22,11 @@
         android:gravity="center"
         android:orientation="vertical">
 
-        <ImageView
-            android:id="@+id/imgArticle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:adjustViewBounds="true"
-            android:scaleType="fitCenter"
-            tools:src="@mipmap/ic_launcher"
-            android:contentDescription="@string/thumbnail" />
-
         <TextView
             android:id="@+id/tvTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:padding="@dimen/card_text_padding"
             android:textColor="@android:color/black"
             tools:text="New Text" />
 

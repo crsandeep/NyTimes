@@ -10,5 +10,8 @@ import retrofit2.http.QueryMap;
 
 public interface ArticleApiInterface {
     @GET("/svc/search/v2/articlesearch.json")
-    public Call<Response> getArticles(@QueryMap Map<String, String> query);
+    Call<Response> getArticles(@QueryMap Map<String, String> query);
+
+    @GET("/svc/search/v2/articlesearch.json")
+    Call<Response> getPopularArticles(@QueryMap Map<String, String> query);
 }

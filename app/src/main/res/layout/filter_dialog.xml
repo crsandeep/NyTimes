@@ -1,31 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp"
+    android:paddingLeft="@dimen/linear_layout_padding"
+    android:paddingRight="@dimen/linear_layout_padding"
     android:layout_height="match_parent">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingTop="16dp"
-        android:text="Date range"/>
+        android:paddingTop="@dimen/linear_layout_padding"
+        android:textStyle="bold"
+        android:textColor="@color/colorPrimary"
+        android:text="@string/date_range"/>
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:focusable="false"
-        android:focusableInTouchMode="false"
-        android:cursorVisible="false"
-        android:id="@+id/etDateRange"
-        android:hint="Select date"/>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="horizontal" android:layout_width="wrap_content"
+        android:paddingLeft="@dimen/linear_layout_padding"
+        android:paddingRight="@dimen/linear_layout_padding"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:layout_width="175dp"
+            android:layout_height="wrap_content"
+            android:textColorHint="#B8BFC2"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:cursorVisible="false"
+            android:id="@+id/etDateRange"
+            android:inputType="date"
+            android:hint="@string/select_date"/>
+
+        <ImageView
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:src="@drawable/ic_date_range_black_24dp"
+            android:layout_marginStart="10dp"
+            android:tint="@color/colorPrimary"
+            android:id="@+id/imgDate"
+            android:contentDescription="@string/set_date"
+            android:onClick="onDateSet"/>
+
+        <ImageView
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:src="@drawable/ic_highlight_off_black_24dp"
+            android:layout_marginStart="10dp"
+            android:tint="@color/colorPrimary"
+            android:id="@+id/imgDateClear"
+            android:contentDescription="@string/clear_date"
+            android:onClick="clearDate"/>
+    </LinearLayout>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingTop="16dp"
         android:paddingBottom="16dp"
-        android:text="Sort by"/>
+        android:textStyle="bold"
+        android:textColor="@color/colorPrimary"
+        android:text="@string/sort_by"/>
 
     <Spinner
         android:id="@+id/oldNewSpinner"
@@ -38,27 +71,31 @@
         android:layout_height="wrap_content"
         android:paddingTop="16dp"
         android:paddingBottom="16dp"
-        android:text="Categories"/>
+        android:textStyle="bold"
+        android:textColor="@color/colorPrimary"
+        android:text="@string/categories"/>
 
-    <CheckBox
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Arts"
-        android:id="@+id/checkBoxArts" />
-    <CheckBox
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Sports"
-        android:id="@+id/checkBoxSports" />
-    <CheckBox
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Movies"
-        android:id="@+id/checkBoxMovies" />
-    <CheckBox
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Politics"
-        android:id="@+id/checkBoxPolitics" />
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="horizontal" android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/arts"
+            android:id="@+id/checkBoxArts" />
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/checkbox_margin"
+            android:layout_marginRight="@dimen/checkbox_margin"
+            android:text="@string/fashion_amp_style"
+            android:id="@+id/checkBoxFashion" />
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/sports"
+            android:id="@+id/checkBoxSports" />
+    </LinearLayout>
 
 </LinearLayout>

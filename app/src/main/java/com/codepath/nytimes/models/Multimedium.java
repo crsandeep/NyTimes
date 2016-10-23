@@ -13,10 +13,6 @@ public class Multimedium {
     @Expose
     private String url;
 
-    public String getUrl() {
-        return url;
-    }
-
     public String getThumbnailUrl() {
         return "https://www.nytimes.com/" + url;
     }

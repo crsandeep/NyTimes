@@ -73,8 +73,13 @@ public class ArticleListActivity extends AppCompatActivity implements
 
     private static Integer PAGE_NUMBER = 0;
     private static String QUERY = "";
+    private static String TEMP_QUERY = "";
     private boolean isArtsChecked = false;
-    private boolean isMoviesChecked = false;
+    private boolean isSportsChecked = false;
+    private boolean isFashionChecked = false;
+    private int sortOrder = 0;
+    private String begin_date = "";
+    private String end_date = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,6 +125,9 @@ public class ArticleListActivity extends AppCompatActivity implements
 
         filterPreferences = getSharedPreferences("filter_settings", Context.MODE_PRIVATE);
         editor = filterPreferences.edit();
+        editor.clear().apply();
+        QUERY = "";
+        TEMP_QUERY = "";
 
         if (!isNetworkAvailable(this)) {
             Snackbar.make(findViewById(R.id.swipeContainer), R.string.not_connected, Snackbar.LENGTH_INDEFINITE).setAction("Retry",
@@ -136,14 +144,11 @@ public class ArticleListActivity extends AppCompatActivity implements
             }
         });
 
-        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
+        swipeContainer.setOnRefreshListener( () -> {
                 PAGE_NUMBER = 0;
                 fetchArticles(QUERY);
-            }
-        });
-        // Configure the refreshing colors
+            });
+
         swipeContainer.setColorSchemeResources(R.color.colorPrimary,
                 R.color.colorAccent);
 
@@ -162,12 +167,14 @@ public class ArticleListActivity extends AppCompatActivity implements
             public boolean onQueryTextSubmit(String query) {
                 PAGE_NUMBER = 0;
                 QUERY = query;
+                TEMP_QUERY = query;
                 fetchArticles(query);
                 searchView.clearFocus();
                 return true;
             }
             @Override
             public boolean onQueryTextChange(String newText) {
+                TEMP_QUERY = newText;
                 return false;
             }
         });
@@ -195,28 +202,58 @@ public class ArticleListActivity extends AppCompatActivity implements
         dialogBuilder.setView(dialogView);
 
         CheckBox checkArts = (CheckBox) dialogView.findViewById(R.id.checkBoxArts);
-        checkArts.setChecked(filterPreferences.getBoolean("isArtsChecked", false));
-
-        final Spinner spinner = (Spinner) dialogView.findViewById(R.id.oldNewSpinner);
+        CheckBox checkFashion = (CheckBox) dialogView.findViewById(R.id.checkBoxFashion);
+        CheckBox checkSports = (CheckBox) dialogView.findViewById(R.id.checkBoxSports);
+        Spinner spinner = (Spinner) dialogView.findViewById(R.id.oldNewSpinner);
         etDateRange = (EditText) dialogView.findViewById(R.id.etDateRange);
 
+        checkArts.setChecked(filterPreferences.getBoolean("isArtsChecked", false));
+        checkFashion.setChecked(filterPreferences.getBoolean("isFashionChecked", false));
+        checkSports.setChecked(filterPreferences.getBoolean("isSportsChecked", false));
+        spinner.setSelection(filterPreferences.getInt("sortOrder", 0));
+        if(!TextUtils.isEmpty(filterPreferences.getString("begin_date", ""))) {
+            String tempDateRange = filterPreferences.getString("begin_date", "") + '-' + filterPreferences.getString("end_date", "");
+            etDateRange.setText(tempDateRange);
+        }
+
         dialogBuilder.setTitle("Filter");
-        dialogBuilder.setPositiveButton("Apply", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
+        dialogBuilder.setPositiveButton("Apply", (DialogInterface dialog, int whichButton) -> {
                 isArtsChecked = checkArts.isChecked();
                 editor.putBoolean("isArtsChecked", isArtsChecked);
-                editor.apply();
-                Log.d(Constants.TAG, "showFilterDialog: "+isArtsChecked);
 
-                CheckBox checkMovies = (CheckBox) dialogView.findViewById(R.id.checkBoxArts);
-                isMoviesChecked = checkMovies.isChecked();
-            }
-        });
-        dialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-                //pass
-            }
-        });
+                isFashionChecked = checkFashion.isChecked();
+                editor.putBoolean("isFashionChecked", isFashionChecked);
+
+                isSportsChecked = checkSports.isChecked();
+                editor.putBoolean("isSportsChecked", isSportsChecked);
+
+                sortOrder = spinner.getSelectedItemPosition();
+                editor.putInt("sortOrder", sortOrder);
+
+                if(!TextUtils.isEmpty(etDateRange.getText().toString())) {
+                    String temp_date[] = etDateRange.getText().toString().split("-");
+                    if(temp_date.length == 2) {
+                        begin_date = temp_date[0];
+                        end_date = temp_date[1];
+                    }
+                } else {
+                    begin_date = "";
+                    end_date = "";
+                }
+                editor.putString("begin_date", begin_date);
+                editor.putString("end_date", end_date);
+
+                editor.apply();
+
+                if(!TextUtils.isEmpty(TEMP_QUERY) || !TextUtils.isEmpty(QUERY)) {
+                    PAGE_NUMBER = 0;
+                    if(!TextUtils.isEmpty(TEMP_QUERY)) {
+                        QUERY = TEMP_QUERY;
+                    }
+                    fetchArticles(QUERY);
+                }
+            });
+        dialogBuilder.setNegativeButton("Cancel", (DialogInterface dialog, int whichButton) -> {});
         AlertDialog b = dialogBuilder.create();
         b.show();
 
@@ -259,15 +296,19 @@ public class ArticleListActivity extends AppCompatActivity implements
         params.put("page", String.valueOf(PAGE_NUMBER));
         params.put("api_key", Constants.API_KEY);
 
-        String sort = filterPreferences.getString("sort", "");
+        int sort = filterPreferences.getInt("sortOrder", 0);
         String begin_date = filterPreferences.getString("begin_date", "");
         String end_date = filterPreferences.getString("end_date", "");
         String news_desk = filterPreferences.getString("news_desk", "");
 
         Log.d("NyTimes", "sort: " + sort + " begin_date:" + begin_date + " end_date:" + end_date + "news_desk:" + news_desk);
 
-        if (!TextUtils.isEmpty(sort)) {
-            params.put("sort", sort);
+        if(sort != 0) {
+            String sortString = "newest";
+            if(sort == 2) {
+                sortString = "oldest";
+            }
+            params.put("sort", sortString);
         }
         if (!TextUtils.isEmpty(begin_date)) {
             params.put("begin_date", begin_date);
@@ -275,8 +316,20 @@ public class ArticleListActivity extends AppCompatActivity implements
         if (!TextUtils.isEmpty(end_date)) {
             params.put("end_date", end_date);
         }
-        if (!TextUtils.isEmpty(news_desk)) {
-            params.put("fq", "news_desk:(" + news_desk + ")");
+        if(isArtsChecked || isSportsChecked || isFashionChecked) {
+            String temp = "news_desk:(";
+            if(isArtsChecked) {
+                temp += " Arts";
+            }
+            if(isSportsChecked) {
+                temp += " Sports";
+            }
+            if(isFashionChecked) {
+                temp += " Fashion%20%26%20Style";
+            }
+            temp += ")";
+            Log.d(Constants.TAG, "fetchArticles: "+ temp);
+            params.put("fq", temp);
         }
 
         ArticleApiInterface apiService = retrofit.create(ArticleApiInterface.class);
@@ -311,7 +364,38 @@ public class ArticleListActivity extends AppCompatActivity implements
 
     @Override
     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth, int yearEnd, int monthOfYearEnd, int dayOfMonthEnd) {
-        String date = dayOfMonth+"/"+(++monthOfYear)+"/"+year + " to " + dayOfMonthEnd+"/"+(++monthOfYearEnd)+"/"+yearEnd;
+        String day = Integer.toString(dayOfMonth);
+        if(day.length() == 1) {
+            day = "0" + day;
+        }
+        String month = Integer.toString(++monthOfYear);
+        if(month.length() == 1) {
+            month = "0" + month;
+        }
+        String dayEnd = Integer.toString(dayOfMonthEnd);
+        if(dayEnd.length() == 1) {
+            dayEnd = "0" + dayEnd;
+        }
+        String monthEnd = Integer.toString(++monthOfYearEnd);
+        if(monthEnd.length() == 1) {
+            monthEnd = "0" + monthEnd;
+        }
+        String date = Integer.toString(year)+month+day + "-" + yearEnd+monthEnd+dayEnd;
         etDateRange.setText(date);
+    }
+
+    public void clearDate(View view) {
+        etDateRange.setText("");
+    }
+
+    public void onDateSet(View view) {
+        Calendar now = Calendar.getInstance();
+        DatePickerDialog dpd = DatePickerDialog.newInstance(
+                ArticleListActivity.this,
+                now.get(Calendar.YEAR),
+                now.get(Calendar.MONTH),
+                now.get(Calendar.DAY_OF_MONTH)
+        );
+        dpd.show(getFragmentManager(), "Datepickerdialog");
     }
 }

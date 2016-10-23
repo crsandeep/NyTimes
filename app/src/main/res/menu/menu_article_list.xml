@@ -3,14 +3,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item android:id="@+id/action_search"
         android:orderInCategory="5"
-        android:title="Search"
+        android:title="@string/search"
         android:icon="@android:drawable/ic_menu_search"
         app:showAsAction="ifRoom|collapseActionView"
         app:actionViewClass="android.support.v7.widget.SearchView" />
 
     <item android:id="@+id/action_filter"
         android:orderInCategory="6"
-        android:title="Filter"
-        android:icon="@drawable/ic_filter_list_white_24dp"
+        android:title="@string/filter"
+        android:icon="@drawable/ic_list_black_24dp"
+        android:tint="@android:color/white"
+        android:fillColor="@android:color/white"
+        android:layout_width="34dp"
+        android:layout_height="34dp"
         app:showAsAction="always" />
 </menu>
