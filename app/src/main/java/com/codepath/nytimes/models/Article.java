@@ -22,6 +22,8 @@ public class Article {
     @Expose
     private Headline headline;
 
+    public String thumbnailUrl;
+
     public String getWebUrl() {
         return webUrl;
     }

@@ -4,14 +4,16 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
-import com.codepath.nytimes.R;
+import com.codepath.nytimes.databinding.ItemArticleNoImageBinding;
 
 public class ArticleNoImageHolder extends RecyclerView.ViewHolder {
 
+    public ItemArticleNoImageBinding binding;
     public TextView tvTitle;
 
     public ArticleNoImageHolder(View itemView) {
         super(itemView);
-        tvTitle = (TextView) itemView.findViewById(R.id.tvTitle);
+        binding = ItemArticleNoImageBinding.bind(itemView);
+        tvTitle = binding.tvTitle;
     }
 }

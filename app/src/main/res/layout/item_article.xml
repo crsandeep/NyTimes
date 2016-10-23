@@ -1,45 +1,53 @@
-<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/card_view"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:clickable="true"
-    android:foreground="?android:attr/selectableItemBackground"
-    card_view:cardBackgroundColor="@color/cardBackgroundColor"
-    card_view:cardCornerRadius="@dimen/card_corner_radius"
-    card_view:cardElevation="@dimen/card_elevation"
-    card_view:cardPreventCornerOverlap="false"
-    card_view:cardUseCompatPadding="true"
-    card_view:contentPadding="@dimen/card_content_padding">
+    <data>
+        <variable
+            name="article"
+            type="com.codepath.nytimes.models.Article" />
+    </data>
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+    <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/card_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="vertical">
+        android:clickable="true"
+        android:foreground="?android:attr/selectableItemBackground"
+        card_view:cardBackgroundColor="@color/cardBackgroundColor"
+        card_view:cardCornerRadius="@dimen/card_corner_radius"
+        card_view:cardElevation="@dimen/card_elevation"
+        card_view:cardPreventCornerOverlap="false"
+        card_view:cardUseCompatPadding="true"
+        card_view:contentPadding="@dimen/card_content_padding">
 
-        <ImageView
-            android:id="@+id/imgArticle"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:adjustViewBounds="true"
-            android:scaleType="fitCenter"
-            tools:src="@mipmap/ic_launcher"
-            android:contentDescription="@string/thumbnail" />
+            android:gravity="center"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/tvTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:padding="@dimen/card_text_padding"
-            android:textColor="@android:color/black"
-            tools:text="New Text" />
+            <ImageView
+                android:id="@+id/imgArticle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/thumbnail"
+                android:scaleType="fitCenter"
+                app:imageUrl="@{article.thumbnailUrl}"
+                tools:src="@mipmap/ic_launcher" />
 
-    </LinearLayout>
+            <TextView
+                android:id="@+id/tvTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:padding="@dimen/card_text_padding"
+                android:textColor="@android:color/black"
+                android:text="@{article.headline.main}"
+                tools:text="New Text" />
 
-</android.support.v7.widget.CardView>
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+</layout>

@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
@@ -15,12 +16,10 @@ import android.support.customtabs.CustomTabsIntent;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MenuItemCompat;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -39,6 +38,7 @@ import com.codepath.nytimes.Utils.Constants;
 import com.codepath.nytimes.adapters.ArticleAdapter;
 import com.codepath.nytimes.adapters.EndlessRecyclerViewScrollListener;
 import com.codepath.nytimes.adapters.ItemClickSupport;
+import com.codepath.nytimes.databinding.ActivityArticleListBinding;
 import com.codepath.nytimes.models.Article;
 import com.codepath.nytimes.models.Response;
 import com.codepath.nytimes.network.ArticleApiInterface;
@@ -49,8 +49,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -60,12 +58,11 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ArticleListActivity extends AppCompatActivity implements
         DatePickerDialog.OnDateSetListener {
 
+    private ActivityArticleListBinding binding;
+
     private ArticleAdapter articleAdapter;
     private List<Article> articleList;
 
-    @BindView(R.id.rvList) RecyclerView rvList;
-    @BindView(R.id.swipeContainer) SwipeRefreshLayout swipeContainer;
-    @BindView(R.id.toolbar) Toolbar toolbar;
     private EditText etDateRange;
 
     private SharedPreferences filterPreferences;
@@ -84,22 +81,21 @@ public class ArticleListActivity extends AppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_article_list);
-        ButterKnife.bind(this);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_article_list);
 
-        setSupportActionBar(toolbar);
+        setSupportActionBar(binding.toolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setLogo(R.mipmap.nytimes);
         getSupportActionBar().setDisplayUseLogoEnabled(true);
 
         articleList = new ArrayList<>();
         articleAdapter = new ArticleAdapter(this, articleList);
-        rvList.setAdapter(articleAdapter);
+        binding.rvList.setAdapter(articleAdapter);
 
         StaggeredGridLayoutManager mLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
-        rvList.setLayoutManager(mLayoutManager);
+        binding.rvList.setLayoutManager(mLayoutManager);
 
-        ItemClickSupport.addTo(rvList).setOnItemClickListener(
+        ItemClickSupport.addTo(binding.rvList).setOnItemClickListener(
                 (RecyclerView recyclerView, int position, View v) -> {
                         Article article = articleList.get(position);
                         String url = article.getWebUrl();
@@ -136,7 +132,7 @@ public class ArticleListActivity extends AppCompatActivity implements
                     }).show();
         }
 
-        rvList.addOnScrollListener(new EndlessRecyclerViewScrollListener((StaggeredGridLayoutManager) mLayoutManager) {
+        binding.rvList.addOnScrollListener(new EndlessRecyclerViewScrollListener((StaggeredGridLayoutManager) mLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount) {
                 PAGE_NUMBER++;
@@ -144,12 +140,12 @@ public class ArticleListActivity extends AppCompatActivity implements
             }
         });
 
-        swipeContainer.setOnRefreshListener( () -> {
+        binding.swipeContainer.setOnRefreshListener( () -> {
                 PAGE_NUMBER = 0;
                 fetchArticles(QUERY);
             });
 
-        swipeContainer.setColorSchemeResources(R.color.colorPrimary,
+        binding.swipeContainer.setColorSchemeResources(R.color.colorPrimary,
                 R.color.colorAccent);
 
 
@@ -279,7 +275,7 @@ public class ArticleListActivity extends AppCompatActivity implements
         }
 
         if(TextUtils.isEmpty(query)) {
-            swipeContainer.setRefreshing(false);
+            binding.swipeContainer.setRefreshing(false);
             return;
         }
 
@@ -342,7 +338,7 @@ public class ArticleListActivity extends AppCompatActivity implements
                     Response r = response.body();
                     articleList.addAll(r.getDocument().getArticles());
                     articleAdapter.notifyDataSetChanged();
-                    swipeContainer.setRefreshing(false);
+                    binding.swipeContainer.setRefreshing(false);
                 } else {
                     Toast.makeText(ArticleListActivity.this, "status code"+ response.code(), Toast.LENGTH_SHORT).show();
                 }

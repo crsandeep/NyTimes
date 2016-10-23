@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.bumptech.glide.Glide;
 import com.codepath.nytimes.R;
 import com.codepath.nytimes.models.Article;
 
@@ -39,12 +38,11 @@ public class ArticleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         if(holder.getItemViewType() == ARTICLE) {
             ArticleHolder ah = (ArticleHolder) holder;
-            ah.tvTitle.setText(article.getHeadline().getMain());
-            ah.imgArticle.setImageResource(0);
-            Glide.with(mContext).load(article.getMultimedia().get(0).getThumbnailUrl()).placeholder(R.drawable.loading).into(((ArticleHolder) holder).imgArticle);
+            article.thumbnailUrl = article.getMultimedia().get(0).getThumbnailUrl();
+            ah.binding.setArticle(article);
         } else {
             ArticleNoImageHolder ah = (ArticleNoImageHolder) holder;
-            ah.tvTitle.setText(article.getHeadline().getMain());
+            ah.binding.setArticle(article);
         }
     }
 
@@ -69,13 +67,10 @@ public class ArticleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         return mArticles.size();
     }
 
-//    public static class ViewHolder extends RecyclerView.ViewHolder {
-//        @BindView(R.id.tvTitle) TextView tvTitle;
-//        @BindView(R.id.imgArticle) ImageView imgArticle;
-//        public ViewHolder(View itemView) {
-//            super(itemView);
-//            ButterKnife.bind(this, itemView);
-//        }
+//    @BindingAdapterUtils({"bind:imageUrl"})
+//    public static void loadImage(ImageView view, String url) {
+//        view.setImageResource(0);
+//        Glide.with(view.getContext()).load("http://www.nytimes.com/" + url).placeholder(R.drawable.loading).into(view);
 //    }
 
 }
