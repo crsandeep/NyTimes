@@ -41,6 +41,9 @@ The following **bonus** features are implemented:
 
 The following **additional** features are implemented:
 
+* [x] Added home page to see popular articles
+* [x] Articles is home page are horizontally scrollable using RecyclerView
+* [x] Making top article api call to get popular politics, national, sports and fashion articles
 * [x] Replaced actionbar with toolbar
 * [x] Added search by voice feature
 * [x] Added feature to hide toolbar when the user scrolls down
