@@ -209,8 +209,8 @@ public class PopularActivity extends AppCompatActivity {
                 runOnUiThread( () -> {
                         try {
                             JSONObject responseJSON = new JSONObject(responseData);
-                            JSONArray movieJsonResults = responseJSON.getJSONArray("results");
-                            politicsList.addAll(PopularArticle.fromJson(movieJsonResults));
+                            JSONArray jsonResults = responseJSON.getJSONArray("results");
+                            politicsList.addAll(PopularArticle.fromJson(jsonResults));
                             horizontalPoliticsAdapter.notifyDataSetChanged();
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -224,20 +224,20 @@ public class PopularActivity extends AppCompatActivity {
             }
         });
 
-        String url1 = "https://api.nytimes.com/svc/topstories/v2/national.json?api-key=bfa504d8afec47ba9757b3dab9201ddd";
+        url = "https://api.nytimes.com/svc/topstories/v2/national.json?api-key=bfa504d8afec47ba9757b3dab9201ddd";
 
-        Request request1 = new Request.Builder()
-                .url(url1)
+        request = new Request.Builder()
+                .url(url)
                 .build();
-        client.newCall(request1).enqueue(new okhttp3.Callback() {
+        client.newCall(request).enqueue(new okhttp3.Callback() {
             @Override
             public void onResponse(okhttp3.Call call, final okhttp3.Response response) throws IOException {
                 final String responseData = response.body().string();
                 runOnUiThread(() -> {
                         try {
                             JSONObject responseJSON = new JSONObject(responseData);
-                            JSONArray movieJsonResults = responseJSON.getJSONArray("results");
-                            nationalList.addAll(PopularArticle.fromJson(movieJsonResults));
+                            JSONArray jsonResults = responseJSON.getJSONArray("results");
+                            nationalList.addAll(PopularArticle.fromJson(jsonResults));
                             horizontalNationalAdapter.notifyDataSetChanged();
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -251,20 +251,20 @@ public class PopularActivity extends AppCompatActivity {
             }
         });
 
-        String url2 = "https://api.nytimes.com/svc/topstories/v2/sports.json?api-key=bfa504d8afec47ba9757b3dab9201ddd";
+        url = "https://api.nytimes.com/svc/topstories/v2/sports.json?api-key=bfa504d8afec47ba9757b3dab9201ddd";
 
-        Request request2 = new Request.Builder()
-                .url(url2)
+        request = new Request.Builder()
+                .url(url)
                 .build();
-        client.newCall(request2).enqueue(new okhttp3.Callback() {
+        client.newCall(request).enqueue(new okhttp3.Callback() {
             @Override
             public void onResponse(okhttp3.Call call, final okhttp3.Response response) throws IOException {
                 final String responseData = response.body().string();
                 runOnUiThread(() -> {
                         try {
                             JSONObject responseJSON = new JSONObject(responseData);
-                            JSONArray movieJsonResults = responseJSON.getJSONArray("results");
-                            sportsList.addAll(PopularArticle.fromJson(movieJsonResults));
+                            JSONArray jsonResults = responseJSON.getJSONArray("results");
+                            sportsList.addAll(PopularArticle.fromJson(jsonResults));
                             horizontalSportsAdapter.notifyDataSetChanged();
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -278,20 +278,20 @@ public class PopularActivity extends AppCompatActivity {
             }
         });
 
-        String url3 = "https://api.nytimes.com/svc/topstories/v2/fashion.json?api-key=bfa504d8afec47ba9757b3dab9201ddd";
+        url = "https://api.nytimes.com/svc/topstories/v2/fashion.json?api-key=bfa504d8afec47ba9757b3dab9201ddd";
 
-        Request request3 = new Request.Builder()
-                .url(url3)
+        request = new Request.Builder()
+                .url(url)
                 .build();
-        client.newCall(request3).enqueue(new okhttp3.Callback() {
+        client.newCall(request).enqueue(new okhttp3.Callback() {
             @Override
             public void onResponse(okhttp3.Call call, final okhttp3.Response response) throws IOException {
                 final String responseData = response.body().string();
                 runOnUiThread(() -> {
                         try {
                             JSONObject responseJSON = new JSONObject(responseData);
-                            JSONArray movieJsonResults = responseJSON.getJSONArray("results");
-                            fashionList.addAll(PopularArticle.fromJson(movieJsonResults));
+                            JSONArray jsonResults = responseJSON.getJSONArray("results");
+                            fashionList.addAll(PopularArticle.fromJson(jsonResults));
                             horizontalFashionAdapter.notifyDataSetChanged();
                         } catch (JSONException e) {
                             e.printStackTrace();
