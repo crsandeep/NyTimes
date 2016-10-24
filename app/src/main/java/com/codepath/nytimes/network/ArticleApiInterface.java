@@ -12,6 +12,15 @@ public interface ArticleApiInterface {
     @GET("/svc/search/v2/articlesearch.json")
     Call<Response> getArticles(@QueryMap Map<String, String> query);
 
-    @GET("/svc/search/v2/articlesearch.json")
-    Call<Response> getPopularArticles(@QueryMap Map<String, String> query);
+    @GET("/svc/topstories/v2/politics.json")
+    Call<Response> getPopularPolitics(@QueryMap Map<String, String> query);
+
+    @GET("/svc/topstories/v2/national.json")
+    Call<Response> getPopularNational(@QueryMap Map<String, String> query);
+
+    @GET("/svc/topstories/v2/sports.json")
+    Call<Response> getPopularSports(@QueryMap Map<String, String> query);
+
+    @GET("/svc/topstories/v2/fashion.json")
+    Call<Response> getPopularFashion(@QueryMap Map<String, String> query);
 }

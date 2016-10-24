@@ -283,7 +283,7 @@ public class ArticleListActivity extends AppCompatActivity implements
         });
     }
 
-    private void fetchArticles(final String query) {
+    public void fetchArticles(final String query) {
 
         if (PAGE_NUMBER == 0) {
             articleList.clear();
