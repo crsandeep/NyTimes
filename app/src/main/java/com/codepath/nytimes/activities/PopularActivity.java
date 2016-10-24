@@ -52,6 +52,7 @@ public class PopularActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ActivityPopularBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_popular);
+
         setSupportActionBar(binding.toolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setLogo(R.mipmap.nytimes);
@@ -71,7 +72,7 @@ public class PopularActivity extends AppCompatActivity {
         horizontalSportsAdapter=new HorizontalAdapter(this, sportsList);
         horizontalFashionAdapter=new HorizontalAdapter(this, fashionList);
 
-        LinearLayoutManager horizontalLayoutManager
+        LinearLayoutManager horizontalLayoutManager1
                 = new LinearLayoutManager(PopularActivity.this, LinearLayoutManager.HORIZONTAL, false);
         LinearLayoutManager horizontalLayoutManager2
                 = new LinearLayoutManager(PopularActivity.this, LinearLayoutManager.HORIZONTAL, false);
@@ -79,7 +80,8 @@ public class PopularActivity extends AppCompatActivity {
                 = new LinearLayoutManager(PopularActivity.this, LinearLayoutManager.HORIZONTAL, false);
         LinearLayoutManager horizontalLayoutManager4
                 = new LinearLayoutManager(PopularActivity.this, LinearLayoutManager.HORIZONTAL, false);
-        binding.horizontalRecyclerViewPolitics.setLayoutManager(horizontalLayoutManager);
+
+        binding.horizontalRecyclerViewPolitics.setLayoutManager(horizontalLayoutManager1);
         binding.horizontalRecyclerViewPolitics.setAdapter(horizontalPoliticsAdapter);
 
         binding.horizontalRecyclerViewNational.setLayoutManager(horizontalLayoutManager2);
@@ -91,101 +93,25 @@ public class PopularActivity extends AppCompatActivity {
         binding.horizontalRecyclerViewFashion.setLayoutManager(horizontalLayoutManager4);
         binding.horizontalRecyclerViewFashion.setAdapter(horizontalFashionAdapter);
 
-
-
         ItemClickSupport.addTo(binding.horizontalRecyclerViewPolitics).setOnItemClickListener(
                 (RecyclerView recyclerView, int position, View v) -> {
-                    PopularArticle article = politicsList.get(position);
-                    String url = article.webUrl;
-                    Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_action_name);
-                    Intent intent = new Intent(Intent.ACTION_SEND);
-                    intent.setType("text/plain");
-                    intent.putExtra(Intent.EXTRA_TEXT, article.webUrl);
-
-                    int requestCode = 100;
-
-                    PendingIntent pendingIntent = PendingIntent.getActivity(PopularActivity.this,
-                            requestCode,
-                            intent,
-                            PendingIntent.FLAG_UPDATE_CURRENT);
-
-                    CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
-                    builder.setToolbarColor(ContextCompat.getColor(PopularActivity.this, R.color.colorPrimary));
-                    builder.setActionButton(bitmap, "Share Link", pendingIntent, true);
-                    CustomTabsIntent customTabsIntent = builder.build();
-                    customTabsIntent.launchUrl(PopularActivity.this, Uri.parse(url));
+                    intentUtil(position, politicsList);
                 });
 
         ItemClickSupport.addTo(binding.horizontalRecyclerViewFashion).setOnItemClickListener(
                 (RecyclerView recyclerView, int position, View v) -> {
-                    PopularArticle article = fashionList.get(position);
-                    String url = article.webUrl;
-                    Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_action_name);
-                    Intent intent = new Intent(Intent.ACTION_SEND);
-                    intent.setType("text/plain");
-                    intent.putExtra(Intent.EXTRA_TEXT, article.webUrl);
-
-                    int requestCode = 100;
-
-                    PendingIntent pendingIntent = PendingIntent.getActivity(PopularActivity.this,
-                            requestCode,
-                            intent,
-                            PendingIntent.FLAG_UPDATE_CURRENT);
-
-                    CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
-                    builder.setToolbarColor(ContextCompat.getColor(PopularActivity.this, R.color.colorPrimary));
-                    builder.setActionButton(bitmap, "Share Link", pendingIntent, true);
-                    CustomTabsIntent customTabsIntent = builder.build();
-                    customTabsIntent.launchUrl(PopularActivity.this, Uri.parse(url));
+                    intentUtil(position, fashionList);
                 });
 
         ItemClickSupport.addTo(binding.horizontalRecyclerViewNational).setOnItemClickListener(
                 (RecyclerView recyclerView, int position, View v) -> {
-                    PopularArticle article = nationalList.get(position);
-                    String url = article.webUrl;
-                    Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_action_name);
-                    Intent intent = new Intent(Intent.ACTION_SEND);
-                    intent.setType("text/plain");
-                    intent.putExtra(Intent.EXTRA_TEXT, article.webUrl);
-
-                    int requestCode = 100;
-
-                    PendingIntent pendingIntent = PendingIntent.getActivity(PopularActivity.this,
-                            requestCode,
-                            intent,
-                            PendingIntent.FLAG_UPDATE_CURRENT);
-
-                    CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
-                    builder.setToolbarColor(ContextCompat.getColor(PopularActivity.this, R.color.colorPrimary));
-                    builder.setActionButton(bitmap, "Share Link", pendingIntent, true);
-                    CustomTabsIntent customTabsIntent = builder.build();
-                    customTabsIntent.launchUrl(PopularActivity.this, Uri.parse(url));
+                    intentUtil(position, nationalList);
                 });
 
         ItemClickSupport.addTo(binding.horizontalRecyclerViewSports).setOnItemClickListener(
                 (RecyclerView recyclerView, int position, View v) -> {
-                    PopularArticle article = sportsList.get(position);
-                    String url = article.webUrl;
-                    Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_action_name);
-                    Intent intent = new Intent(Intent.ACTION_SEND);
-                    intent.setType("text/plain");
-                    intent.putExtra(Intent.EXTRA_TEXT, article.webUrl);
-
-                    int requestCode = 100;
-
-                    PendingIntent pendingIntent = PendingIntent.getActivity(PopularActivity.this,
-                            requestCode,
-                            intent,
-                            PendingIntent.FLAG_UPDATE_CURRENT);
-
-                    CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
-                    builder.setToolbarColor(ContextCompat.getColor(PopularActivity.this, R.color.colorPrimary));
-                    builder.setActionButton(bitmap, "Share Link", pendingIntent, true);
-                    CustomTabsIntent customTabsIntent = builder.build();
-                    customTabsIntent.launchUrl(PopularActivity.this, Uri.parse(url));
+                    intentUtil(position, sportsList);
                 });
-
-
 
 
         OkHttpClient client = new OkHttpClient();
@@ -325,4 +251,25 @@ public class PopularActivity extends AppCompatActivity {
         return connectivityManager.getActiveNetworkInfo() != null && connectivityManager.getActiveNetworkInfo().isConnected();
     }
 
+    public void intentUtil(int position, List<PopularArticle> list) {
+        PopularArticle article = list.get(position);
+        String url = article.webUrl;
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_action_name);
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("text/plain");
+        intent.putExtra(Intent.EXTRA_TEXT, article.webUrl);
+
+        int requestCode = 100;
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(PopularActivity.this,
+                requestCode,
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+
+        CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+        builder.setToolbarColor(ContextCompat.getColor(PopularActivity.this, R.color.colorPrimary));
+        builder.setActionButton(bitmap, "Share Link", pendingIntent, true);
+        CustomTabsIntent customTabsIntent = builder.build();
+        customTabsIntent.launchUrl(PopularActivity.this, Uri.parse(url));
+    }
 }
