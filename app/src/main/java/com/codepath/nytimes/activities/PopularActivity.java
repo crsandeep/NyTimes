@@ -1,12 +1,15 @@
 package com.codepath.nytimes.activities;
 
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.customtabs.CustomTabsIntent;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,6 +18,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 
 import com.codepath.nytimes.R;
 import com.codepath.nytimes.adapters.HorizontalAdapter;
@@ -37,6 +41,7 @@ public class PopularActivity extends AppCompatActivity {
     private HorizontalAdapter horizontalPoliticsAdapter, horizontalNationalAdapter, horizontalSportsAdapter, horizontalFashionAdapter;
 
     Toolbar toolbar;
+    LinearLayout linearLayout;
 
     List<PopularArticle> politicsList = new ArrayList<>();
     List<PopularArticle> nationalList = new ArrayList<>();
@@ -53,6 +58,15 @@ public class PopularActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setLogo(R.mipmap.nytimes);
         getSupportActionBar().setDisplayUseLogoEnabled(true);
+
+        linearLayout = (LinearLayout) findViewById(R.id.popularLinearLayout);
+
+        if (!isNetworkAvailable(this)) {
+            Snackbar.make(linearLayout, R.string.not_connected, Snackbar.LENGTH_INDEFINITE).setAction("Retry",
+                    v -> {
+                        this.recreate();
+                    }).show();
+        }
 
         RecyclerView horizontal_recycler_view_politics = (RecyclerView) findViewById(R.id.horizontal_recycler_view_politics);
         RecyclerView horizontal_recycler_view_national = (RecyclerView) findViewById(R.id.horizontal_recycler_view_national);
@@ -311,6 +325,11 @@ public class PopularActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    public boolean isNetworkAvailable(final Context context) {
+        final ConnectivityManager connectivityManager = ((ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE));
+        return connectivityManager.getActiveNetworkInfo() != null && connectivityManager.getActiveNetworkInfo().isConnected();
     }
 
 }
