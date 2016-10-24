@@ -72,6 +72,7 @@ Describe any challenges encountered while building the app.
 - [Glide](https://github.com/bumptech/glide) - An image loading and caching library for Android focused on smooth scrolling.
 - [Parceler](https://github.com/johncarl81/parceler) - Android Parcelables made easy through code generation.
 - [gson](https://github.com/google/gson) - A Java serialization/deserialization library that can convert Java Objects into JSON and back.
+- [RetroLambda](https://github.com/evant/gradle-retrolambda) - A gradle plugin for getting java lambda support in java 6, 7 and android.
 
 ## License
 
