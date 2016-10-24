@@ -14,13 +14,11 @@ import java.util.List;
 public class ArticleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private List<Article> mArticles;
-    private Context mContext;
 
     private int ARTICLE = 1;
 
-    public ArticleAdapter(Context context, List<Article> articles) {
+    public ArticleAdapter(List<Article> articles) {
         mArticles = articles;
-        mContext = context;
     }
 
     @Override
@@ -66,11 +64,5 @@ public class ArticleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public int getItemCount() {
         return mArticles.size();
     }
-
-//    @BindingAdapterUtils({"bind:imageUrl"})
-//    public static void loadImage(ImageView view, String url) {
-//        view.setImageResource(0);
-//        Glide.with(view.getContext()).load("http://www.nytimes.com/" + url).placeholder(R.drawable.loading).into(view);
-//    }
 
 }

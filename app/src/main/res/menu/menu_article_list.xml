@@ -6,6 +6,7 @@
         android:title="@string/search"
         android:icon="@android:drawable/ic_menu_search"
         app:showAsAction="ifRoom|collapseActionView"
+        android:voiceSearchMode="showVoiceSearchButton|launchRecognizer"
         app:actionViewClass="android.support.v7.widget.SearchView" />
 
     <item android:id="@+id/action_filter"
