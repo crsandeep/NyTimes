@@ -43,12 +43,12 @@ The following **additional** features are implemented:
 
 * [x] Added home page to see popular articles
 * [x] Articles is home page are horizontally scrollable using RecyclerView
-* [x] Making top article api call to get popular politics, national, sports and fashion articles
+* [x] Making top stories api call to get top politics, national, sports and fashion articles
 * [x] Replaced actionbar with toolbar
-* [x] Added search by voice feature
 * [x] Added feature to hide toolbar when the user scrolls down
+* [x] Added search by voice feature
 * [x] Added Snackbar with a retry buton when there is no internet connection
-* [x] Making use of SharedPreferences to persist data
+* [x] Making use of SharedPreferences to persist filter data
 * [x] User can pull-to-refresh
 * [x] Added a slight delay during endless scrolling to avoid getting API rate limiting error
 
