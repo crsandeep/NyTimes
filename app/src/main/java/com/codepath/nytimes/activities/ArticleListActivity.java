@@ -114,7 +114,6 @@ public class ArticleListActivity extends AppCompatActivity implements
                             intent,
                             PendingIntent.FLAG_UPDATE_CURRENT);
 
-
                     CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
                     builder.setToolbarColor(ContextCompat.getColor(ArticleListActivity.this, R.color.colorPrimary));
                     builder.setActionButton(bitmap, "Share Link", pendingIntent, true);
