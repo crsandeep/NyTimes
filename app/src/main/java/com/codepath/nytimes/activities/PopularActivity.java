@@ -3,6 +3,7 @@ package com.codepath.nytimes.activities;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
@@ -14,7 +15,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,6 +23,7 @@ import android.widget.LinearLayout;
 import com.codepath.nytimes.R;
 import com.codepath.nytimes.adapters.HorizontalAdapter;
 import com.codepath.nytimes.adapters.ItemClickSupport;
+import com.codepath.nytimes.databinding.ActivityPopularBinding;
 import com.codepath.nytimes.models.PopularArticle;
 
 import org.json.JSONArray;
@@ -40,7 +41,6 @@ public class PopularActivity extends AppCompatActivity {
 
     private HorizontalAdapter horizontalPoliticsAdapter, horizontalNationalAdapter, horizontalSportsAdapter, horizontalFashionAdapter;
 
-    Toolbar toolbar;
     LinearLayout linearLayout;
 
     List<PopularArticle> politicsList = new ArrayList<>();
@@ -51,15 +51,13 @@ public class PopularActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_popular);
-
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        ActivityPopularBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_popular);
+        setSupportActionBar(binding.toolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setLogo(R.mipmap.nytimes);
         getSupportActionBar().setDisplayUseLogoEnabled(true);
 
-        linearLayout = (LinearLayout) findViewById(R.id.popularLinearLayout);
+        linearLayout = binding.popularLinearLayout;
 
         if (!isNetworkAvailable(this)) {
             Snackbar.make(linearLayout, R.string.not_connected, Snackbar.LENGTH_INDEFINITE).setAction("Retry",
@@ -67,11 +65,6 @@ public class PopularActivity extends AppCompatActivity {
                         this.recreate();
                     }).show();
         }
-
-        RecyclerView horizontal_recycler_view_politics = (RecyclerView) findViewById(R.id.horizontal_recycler_view_politics);
-        RecyclerView horizontal_recycler_view_national = (RecyclerView) findViewById(R.id.horizontal_recycler_view_national);
-        RecyclerView horizontal_recycler_view_sports = (RecyclerView) findViewById(R.id.horizontal_recycler_view_sports);
-        RecyclerView horizontal_recycler_view_fashion = (RecyclerView) findViewById(R.id.horizontal_recycler_view_fashion);
 
         horizontalPoliticsAdapter=new HorizontalAdapter(this, politicsList);
         horizontalNationalAdapter=new HorizontalAdapter(this, nationalList);
@@ -86,21 +79,21 @@ public class PopularActivity extends AppCompatActivity {
                 = new LinearLayoutManager(PopularActivity.this, LinearLayoutManager.HORIZONTAL, false);
         LinearLayoutManager horizontalLayoutManager4
                 = new LinearLayoutManager(PopularActivity.this, LinearLayoutManager.HORIZONTAL, false);
-        horizontal_recycler_view_politics.setLayoutManager(horizontalLayoutManager);
-        horizontal_recycler_view_politics.setAdapter(horizontalPoliticsAdapter);
+        binding.horizontalRecyclerViewPolitics.setLayoutManager(horizontalLayoutManager);
+        binding.horizontalRecyclerViewPolitics.setAdapter(horizontalPoliticsAdapter);
 
-        horizontal_recycler_view_national.setLayoutManager(horizontalLayoutManager2);
-        horizontal_recycler_view_national.setAdapter(horizontalNationalAdapter);
+        binding.horizontalRecyclerViewNational.setLayoutManager(horizontalLayoutManager2);
+        binding.horizontalRecyclerViewNational.setAdapter(horizontalNationalAdapter);
 
-        horizontal_recycler_view_sports.setLayoutManager(horizontalLayoutManager3);
-        horizontal_recycler_view_sports.setAdapter(horizontalSportsAdapter);
+        binding.horizontalRecyclerViewSports.setLayoutManager(horizontalLayoutManager3);
+        binding.horizontalRecyclerViewSports.setAdapter(horizontalSportsAdapter);
 
-        horizontal_recycler_view_fashion.setLayoutManager(horizontalLayoutManager4);
-        horizontal_recycler_view_fashion.setAdapter(horizontalFashionAdapter);
+        binding.horizontalRecyclerViewFashion.setLayoutManager(horizontalLayoutManager4);
+        binding.horizontalRecyclerViewFashion.setAdapter(horizontalFashionAdapter);
 
 
 
-        ItemClickSupport.addTo(horizontal_recycler_view_politics).setOnItemClickListener(
+        ItemClickSupport.addTo(binding.horizontalRecyclerViewPolitics).setOnItemClickListener(
                 (RecyclerView recyclerView, int position, View v) -> {
                     PopularArticle article = politicsList.get(position);
                     String url = article.webUrl;
@@ -123,7 +116,7 @@ public class PopularActivity extends AppCompatActivity {
                     customTabsIntent.launchUrl(PopularActivity.this, Uri.parse(url));
                 });
 
-        ItemClickSupport.addTo(horizontal_recycler_view_fashion).setOnItemClickListener(
+        ItemClickSupport.addTo(binding.horizontalRecyclerViewFashion).setOnItemClickListener(
                 (RecyclerView recyclerView, int position, View v) -> {
                     PopularArticle article = fashionList.get(position);
                     String url = article.webUrl;
@@ -146,7 +139,7 @@ public class PopularActivity extends AppCompatActivity {
                     customTabsIntent.launchUrl(PopularActivity.this, Uri.parse(url));
                 });
 
-        ItemClickSupport.addTo(horizontal_recycler_view_national).setOnItemClickListener(
+        ItemClickSupport.addTo(binding.horizontalRecyclerViewNational).setOnItemClickListener(
                 (RecyclerView recyclerView, int position, View v) -> {
                     PopularArticle article = nationalList.get(position);
                     String url = article.webUrl;
@@ -169,7 +162,7 @@ public class PopularActivity extends AppCompatActivity {
                     customTabsIntent.launchUrl(PopularActivity.this, Uri.parse(url));
                 });
 
-        ItemClickSupport.addTo(horizontal_recycler_view_sports).setOnItemClickListener(
+        ItemClickSupport.addTo(binding.horizontalRecyclerViewSports).setOnItemClickListener(
                 (RecyclerView recyclerView, int position, View v) -> {
                     PopularArticle article = sportsList.get(position);
                     String url = article.webUrl;
