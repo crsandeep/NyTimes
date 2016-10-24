@@ -1,8 +1,8 @@
-# Project 2 - *MyTimes*
+# Project 2 - *NyTimes*
 
-**Name of your app** is an android app that allows a user to search for articles on web using simple filters. The app utilizes [New York Times Search API](http://developer.nytimes.com/docs/read/article_search_api_v2).
+**NyTimes** is an android app that allows a user to search for articles on web using simple filters. The app utilizes [New York Times Search API](http://developer.nytimes.com/docs/read/article_search_api_v2).
 
-Time spent: **30** hours spent in total
+Time spent: **35** hours spent in total
 
 ## User Stories
 
@@ -58,10 +58,6 @@ Here's a walkthrough of implemented user stories:
 
 [YouTube](https://www.youtube.com/watch?v=jf1cqx_t_uQ)
 [sendvid](http://4.sendvid.com/f4uy4m9z.mp4)
-
-## Notes
-
-Describe any challenges encountered while building the app.
 
 ## Open-source libraries used
 
